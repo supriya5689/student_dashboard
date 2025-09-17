@@ -1,0 +1,1 @@
+{"ignoreCommand": "echo 'Ignoring backend directory for Vercel deployment.'","builds": [{"src": "package.json","use": "@vercel/next"}],"ignore": ["backend/"]}
