@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { api, Student } from '@/lib/api';
 import { ArrowUpDown } from 'lucide-react';
 
@@ -12,13 +12,13 @@ export function StudentTable() {
   const [sortBy, setSortBy] = useState('assessment_score');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  async function load() {
+  const load = useCallback(async () => {
     const res = await api.getStudents({ page, limit: 20, search, sortBy, sortOrder });
     setData(res.students);
     setTotal(res.total);
-  }
+  }, [page, search, sortBy, sortOrder]);
 
-  useEffect(() => { load(); }, [page, search, sortBy, sortOrder]);
+  useEffect(() => { load(); }, [load]);
 
   function toggleSort(col: string) {
     if (sortBy === col) setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');

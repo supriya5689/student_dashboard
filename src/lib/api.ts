@@ -18,6 +18,33 @@ export type PaginatedStudents = {
   totalPages: number;
 };
 
+export type Stats = {
+  totalStudents: number;
+  averageScores: {
+    comprehension: string;
+    attention: string;
+    focus: string;
+    retention: string;
+    assessment_score: string;
+    engagement_time: string;
+  };
+  gradeDistribution: Record<string, number>;
+  personaDistribution: Record<string, number>;
+};
+
+export type Correlations = {
+  comprehension: number;
+  attention: number;
+  focus: number;
+  retention: number;
+  engagement_time: number;
+};
+
+export type Insights = {
+  keyFindings: string[];
+  recommendations: string[];
+};
+
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 async function http<T>(path: string, init?: RequestInit): Promise<T> {
@@ -27,10 +54,10 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  getStats: () => http('/api/dashboard/stats'),
-  getCorrelations: () => http('/api/analytics/correlations'),
-  getClusters: () => http('/api/analytics/clusters'),
-  getInsights: () => http('/api/insights'),
+  getStats: () => http<Stats>('/api/dashboard/stats'),
+  getCorrelations: () => http<Correlations>('/api/analytics/correlations'),
+  getClusters: () => http<Record<string, unknown>>('/api/analytics/clusters'),
+  getInsights: () => http<Insights>('/api/insights'),
   getStudents: (params: { page?: number; limit?: number; search?: string; sortBy?: string; sortOrder?: 'asc' | 'desc'; }) => {
     const q = new URLSearchParams({
       page: String(params.page ?? 1),

@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { api } from '@/lib/api';
+import { api, type Insights as InsightsType } from '@/lib/api';
 import { Lightbulb } from 'lucide-react';
 
 export function Insights() {
-  const [insights, setInsights] = useState<any>(null);
+  const [insights, setInsights] = useState<InsightsType | null>(null);
   useEffect(() => { api.getInsights().then(setInsights).catch(console.error); }, []);
   if (!insights) return <div className="rounded-xl border bg-white p-4">Loading insights...</div>;
   return (

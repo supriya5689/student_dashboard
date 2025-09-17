@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ScatterChart, Scatter, Legend, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ScatterChart, Scatter, PieChart, Pie, Cell, LineChart, Line, Area, AreaChart } from 'recharts';
 
 export function SkillVsScoreBar({ data }: { data: { skill: string; correlation: number }[] }) {
   return (
@@ -36,18 +36,83 @@ export function AttentionScatter({ points }: { points: { attention: number; asse
   );
 }
 
-export function StudentRadar({ profile }: { profile: { label: string; value: number }[] }) {
+// Student Profile Pie Chart
+export function StudentProfilePie({ profile }: { profile: { label: string; value: number }[] }) {
+  const COLORS = ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6'];
+  
   return (
     <div className="h-80 w-full rounded-xl border bg-white p-4">
-      <h3 className="font-semibold mb-2">Student Profile</h3>
+      <h3 className="font-semibold mb-2">Student Skills Distribution</h3>
       <ResponsiveContainer width="100%" height="100%">
-        <RadarChart data={profile}>
-          <PolarGrid />
-          <PolarAngleAxis dataKey="label" />
-          <PolarRadiusAxis domain={[0, 100]} />
-          <Radar name="Profile" dataKey="value" stroke="#ef4444" fill="#ef4444" fillOpacity={0.4} />
-          <Legend />
-        </RadarChart>
+        <PieChart>
+          <Pie
+            data={profile}
+            cx="50%"
+            cy="50%"
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey="value"
+          >
+            {profile.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+// Student Profile Bar Chart
+export function StudentProfileBar({ profile }: { profile: { label: string; value: number }[] }) {
+  return (
+    <div className="h-80 w-full rounded-xl border bg-white p-4">
+      <h3 className="font-semibold mb-2">Student Skills Bar Chart</h3>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={profile}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="label" />
+          <YAxis domain={[0, 100]} />
+          <Tooltip />
+          <Bar dataKey="value" fill="#6366f1" radius={[4, 4, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+// Student Profile Line Chart
+export function StudentProfileLine({ profile }: { profile: { label: string; value: number }[] }) {
+  return (
+    <div className="h-80 w-full rounded-xl border bg-white p-4">
+      <h3 className="font-semibold mb-2">Student Skills Trend</h3>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={profile}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="label" />
+          <YAxis domain={[0, 100]} />
+          <Tooltip />
+          <Line type="monotone" dataKey="value" stroke="#22c55e" strokeWidth={3} dot={{ fill: '#22c55e', strokeWidth: 2, r: 6 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+// Student Profile Column Chart (Area Chart)
+export function StudentProfileColumn({ profile }: { profile: { label: string; value: number }[] }) {
+  return (
+    <div className="h-80 w-full rounded-xl border bg-white p-4">
+      <h3 className="font-semibold mb-2">Student Skills Area Chart</h3>
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={profile}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="label" />
+          <YAxis domain={[0, 100]} />
+          <Tooltip />
+          <Area type="monotone" dataKey="value" stroke="#8b5cf6" fill="#8b5cf6" fillOpacity={0.6} />
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
